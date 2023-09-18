@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>MD5 Decoder</h1>
+<p>This application takes an MD5 hash of a four digit pin and check all 10,000 possible four digit PINs to determine the PIN.</p>
+<pre>
+<?php
+	$starttime = microtime(true);
+	$md5 = 'fa246d0262c3925617b0c72bb20eeb1d ';
+    $G_GET = [];
+    $G_GET['md5'] = $md5;
+	echo "Debug Output:\n";
+
+  	//$txt = "PHP";
+  	//echo "I love $txt!";
+  	// prepare '0000' to '9999'
+    $numArray = [];
+    for($w = 0; $w < 10; $w++){
+    	for($x = 0; $x < 10; $x++){
+        	for($y = 0; $y < 10; $y++){
+  				for($z = 0; $z < 10; $z++){
+                	$numArray[] = strval($w).strval($x).strval($y).strval($z);   
+                    //echo("yes");
+                    //var_dump($numArray);
+  				}
+            }
+  		}
+  	}
+    
+    // test for lead 11 elements in numArray
+/*    for($i = 0; $i < 11; $i++){
+    	echo ("$numArray[$i]\n");
+    }
+*/    
+    
+    // encode every string in numArray to md5 and store in mdArray
+    $mdArray = [];
+    for($i=0; $i<count($numArray); $i++){
+    	$mdArray[$numArray[$i]] = hash('md5', $numArray[$i]);
+    }
+    
+    // test for lead 15 elements in mdArray
+    // 有輸入字串 開始比對
+    if (isset($G_GET['md5'])){
+    	
+		
+		
+    	$count = 0;
+    	$result = 'Not Found';
+        $hit = false;
+        //$numbers = count($mdArray);
+        //echo ("numbers of mdArray count($numbers)\n");
+        /* do stuff here */
+        foreach($mdArray as $k => $v) {
+        	if ($count < 15){
+        		echo ("Attempting: $v  $k\n");
+        	}
+            $count++;
+  			
+            
+            if ($v == $G_GET['md5']){
+            	//echo ("hit\n");
+            	$result = $k;
+                $hit = true;
+                break;
+            }
+            
+            
+            
+		}
+        $endtime = microtime(true);
+		$timediff = $endtime - $starttime;
+        echo ("Total checks: $count\n");
+        echo ("Ellapsed time: $timediff\n");
+        echo ("PIN: $result\n");
+        
+        
+/*    	for($i = 0; $i < 11; $i++){
+    		echo ("$mdArray[$i]\n");
+    	}
+*/
+// 預設情形
+    }else{
+    	echo("<p>");
+        echo("PIN: Not found");
+    	echo("</p>");
+    }
+    
+  
+?>
+</pre>
+
+<input type="text" name="md5" size="40">
+<input type="submit" value="Crack MD5">
+
+</body>
+</html>
